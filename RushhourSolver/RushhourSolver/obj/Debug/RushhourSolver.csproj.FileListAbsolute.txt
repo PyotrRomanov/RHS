@@ -4,3 +4,9 @@ F:\Dropbox\school\Concurrency\RushhourSolver\RushhourSolver\bin\Debug\RushhourSo
 F:\Dropbox\school\Concurrency\RushhourSolver\RushhourSolver\obj\Debug\RushhourSolver.csprojResolveAssemblyReference.cache
 F:\Dropbox\school\Concurrency\RushhourSolver\RushhourSolver\obj\Debug\RushhourSolver.exe
 F:\Dropbox\school\Concurrency\RushhourSolver\RushhourSolver\obj\Debug\RushhourSolver.pdb
+F:\Programming\RHS\RushhourSolver\RushhourSolver\bin\Debug\RushhourSolver.exe.config
+F:\Programming\RHS\RushhourSolver\RushhourSolver\obj\Debug\RushhourSolver.exe
+F:\Programming\RHS\RushhourSolver\RushhourSolver\obj\Debug\RushhourSolver.pdb
+F:\Programming\RHS\RushhourSolver\RushhourSolver\bin\Debug\RushhourSolver.exe
+F:\Programming\RHS\RushhourSolver\RushhourSolver\bin\Debug\RushhourSolver.pdb
+F:\Programming\RHS\RushhourSolver\RushhourSolver\obj\Debug\RushhourSolver.csprojResolveAssemblyReference.cache
