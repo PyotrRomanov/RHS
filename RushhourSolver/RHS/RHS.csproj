@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{530FC898-C412-413A-BC09-49189923A636}</ProjectGuid>
+    <ProjectGuid>{1763A731-DA0A-4E6A-82CD-2838A190CEEA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RushhourSolver</RootNamespace>
-    <AssemblyName>RushhourSolver</AssemblyName>
+    <RootNamespace>RHS</RootNamespace>
+    <AssemblyName>RHS</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
