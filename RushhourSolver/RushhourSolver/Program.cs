@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,7 @@ class Program
 
     static public object queueLock = new Object();
     static public object solutionLock = new Object();
+    static ConcurrentQueue<Tuple<byte[], Solution>> q;
 
     // Main entry point for the program
     static void Main(string[] args)
@@ -34,7 +36,10 @@ class Program
         ReadInput();
 
         // Initialize empty queue
-        Queue<Tuple<byte[], Solution>> q = new Queue<Tuple<byte[], Solution>>();
+        q = new ConcurrentQueue<Tuple<byte[], Solution>>();
+        
+        // Initialize list of tasks for multithreading
+        List<Task> tasks = new List<Task>();
 
         // By default, the solution is "no solution"
         foundSolution = new NoSolution();
@@ -43,49 +48,42 @@ class Program
         q.Enqueue(Tuple.Create(vehicleStartPos, (Solution)new EmptySolution()));
         AddNode(vehicleStartPos);
 
-        List<Thread> threads = new List<Thread>();
-
         // Do BFS
         while (q.Count > 0)
         {
 
-            for (int i = 0; i < Environment.ProcessorCount && i < q.Count; i++)
+            for (int i = 0; i < Environment.ProcessorCount; i++)
             {
-                Tuple<byte[], Solution> currentState = q.Dequeue();
-                Thread t = new Thread(() => SuccessorGen(currentState, q));
-                threads.Add(t);
-                t.Start();
+                InitializeTask(ref tasks);
+
             }
-            foreach (Thread a in threads)
-            {
-                a.Join();
-            }
-            //IEnumerable<Tuple<byte[], Solution>> current = Successors(currentState);
-
-            /*Parallel.For(0, current.Count(), new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
-            {
-                // Did we reach the goal?
-                int temp = current.Count();
-                if (current.ElementAt(i).Item1[targetVehicle] == goal)
-                {
-                    q.Clear();
-                    foundSolution = current.ElementAt(i).Item2;
-                    return;
-                }
-
-                // If we haven't seen this node before, add it to the Trie and Queue to be expanded
-                if (!AddNode(current.ElementAt(i).Item1))
-                    q.Enqueue(current.ElementAt(i));
-            });*/
-
-
+            
         }
 
         Console.WriteLine(foundSolution);
         Console.ReadLine();
     }
 
-    static void SuccessorGen(Tuple<byte[], Solution> currentState, Queue<Tuple<byte[], Solution>> q)
+    static void InitializeTask(ref List<Task> tasks)
+    { 
+        // Start a new task that handles BFS operations on the queue
+        Task newTask = Task.Factory.StartNew(() => {
+            // Execute BFS
+            while(!q.IsEmpty){
+                // Attempt to take a state off the stack, returns if this fails. Saves what has been returned in cur
+                Tuple<byte[], Solution> cur;
+                if (q.TryDequeue(out cur))
+                {
+
+                }
+                else {
+                    return;
+                }
+            }
+        });
+    }
+
+    /*static void SuccessorGen(Tuple<byte[], Solution> currentState, ConcurrentQueue<Tuple<byte[], Solution>> q)
     {
         // Generate Successors, and push them on to the queue if they haven't been seen before
         foreach (Tuple<byte[], Solution> next in Successors(currentState))
@@ -102,7 +100,7 @@ class Program
             if (!AddNode(next.Item1))
                 lock (Program.queueLock) { q.Enqueue(next); }
         }
-    }
+    }*/
 
     // Generates the Successors of a state
     private static IEnumerable<Tuple<byte[], Solution>> Successors(Tuple<byte[], Solution> state)
