@@ -1,0 +1,602 @@
+Testcase;Status;Tijd;CPU;Omschrijving
+drie;Correct;0.02;223%;Simpele puzzel met 3 zetten
+kolom4;Correct;0.03;100%;Deze testcase is wat lastiger, 32 zetten
+st;Correct;0.03;100%;Nog lastiger, 37 zetten
+kannie;Correct;0.02;100%;Deze is onmogelijk!
+fifty;Correct;0.04;100%;Fifty shades of sweat?
+qwerty (tel);Correct;0.03;100%;Aantal zetten tellen
+qwerty (oplos);Correct;0.04;100%;En nu ook oplossen graag.
+vol;Correct;0.08;100%;Bij deze staat het bord erg vol.
+rondje;Correct;0.04;100%;Kort, maar lastig...
+exponentieel;Correct;0.75;299%;Onoplosbaar, exponentieel veel posities
+Versnellingstest (exponentieel);235%;-;-;Is je programma sneller dan sequentieel?
+exponentieler;Correct;3.33;349%;Onoplosbaar, exponentieel veel posities
+Versnellingstest (exponentieler);267%;-;-;Is je programma sneller dan sequentieel?
+branching;Correct;2.18;370%;Als exponentieel, maar dan oplosbaar
+Versnellingstest (branching);236%;-;-;Is je programma sneller dan sequentieel?
+hard-1;Correct;0.05;100%;Erg lastig, testcase 1
+hard-1 (oplos);Correct;0.08;100%;hard-1 in de oplosmodus
+hard-2;Correct;0.69;218%;Nog wat lastiger
+hard-3;Correct;6.75;227%;Nu is het echt heel lastig
+exponentieel;Correct;0.68;362%;Onoplosbaar, exponentieel veel posities
+Versnellingstest (exponentieel);260%;-;-;Is je programma sneller dan sequentieel?
+exponentieel;Correct;0.69;332%;Onoplosbaar, exponentieel veel posities
+Versnellingstest (exponentieel);256%;-;-;Is je programma sneller dan sequentieel?
+exponentieler;Correct;3.20;360%;Onoplosbaar, exponentieel veel posities
+Versnellingstest (exponentieler);278%;-;-;Is je programma sneller dan sequentieel?
+exponentieler;Correct;3.19;372%;Onoplosbaar, exponentieel veel posities
+Versnellingstest (exponentieler);279%;-;-;Is je programma sneller dan sequentieel?
+branching;Correct;2.24;366%;Als exponentieel, maar dan oplosbaar
+Versnellingstest (branching);230%;-;-;Is je programma sneller dan sequentieel?
+branching;Correct;2.26;355%;Als exponentieel, maar dan oplosbaar
+Versnellingstest (branching);228%;-;-;Is je programma sneller dan sequentieel?
+
+------------------------------------
+
+1;drie;Correct;0.02;223%;Simpele puzzel met 3 zetten
+Test 1 - drie
+Simpele puzzel met 3 zetten
+
+Invoer:
+1
+6 6
+4 2
+......
+..a...
+xxa.b.
+....b.
+......
+......
+
+Uitvoer:
+au1 bu2 xr4
+
+------------------------------------
+
+2;kolom4;Correct;0.03;100%;Deze testcase is wat lastiger, 32 zetten
+Test 2 - kolom4
+Deze testcase is wat lastiger, 32 zetten
+
+Invoer:
+1
+6 6
+4 2
+a.bccc
+a.bd..
+axxd..
+ffgg.e
+.....e
+hhii.e
+
+Uitvoer:
+gr1 fr1 ir1 hr1 ad3 xl1 bd1 cl1 eu3 ir1 gr1 dd3 gl1 ed1 cr1 bu1 xr3 au3 fl1 hl1 bd4 xl2 fr1 ad2 cl3 eu1 gr1 du4 gl1 il1 ed3 xr3
+
+------------------------------------
+
+3;st;Correct;0.03;100%;Nog lastiger, 37 zetten
+Test 3 - st
+Nog lastiger, 37 zetten
+
+Invoer:
+1
+6 6
+4 2
+aaobcc
+..ob..
+xxo...
+deeffp
+d..k.p
+hh.k.p
+
+Uitvoer:
+bd1 cl1 pu3 fr1 ku1 hr4 dd1 kd1 el1 fl1 pd1 cr1 bu1 od3 xr3 ou3 er1 du3 el1 od3 ar1 du1 xl3 ou1 bd1 cl1 pu1 fr1 ku1 hl4 kd1 fl1 od1 pd3 cr1 bu1 xr4
+
+------------------------------------
+
+4;kannie;Correct;0.02;100%;Deze is onmogelijk!
+Test 4 - kannie
+Deze is onmogelijk!
+
+Invoer:
+1
+12 2
+10 0
+.xx......q..
+.........q..
+
+Uitvoer:
+Geen oplossing gevonden
+
+------------------------------------
+
+5;fifty;Correct;0.04;100%;Fifty shades of sweat?
+Test 5 - fifty
+Fifty shades of sweat?
+
+Invoer:
+1
+6 6
+4 2
+..cddd
+a.ce..
+axxe..
+bbryyi
+.gruui
+.gtt.i
+
+Uitvoer:
+au1 xl1 cd1 dl1 iu3 yr1 ur1 tr2 rd1 ed3 yl1 id1 dr1 cu1 xr3 cd1 dl1 iu1 yr1 br2 gu4 bl2 yl1 id1 dr1 cu1 xl3 cd2 dl1 iu1 yr1 eu3 yl1 id1 dr1 cu2 ru2 ul4 tl4 rd2 cd1 dl1 iu1 yr1 ed3 yl1 id3 dr1 cu1 xr4
+
+------------------------------------
+
+6;qwerty (tel);Correct;0.03;100%;Aantal zetten tellen
+Test 6 - qwerty (tel)
+Aantal zetten tellen
+
+Invoer:
+0
+6 6
+4 2
+..qwwe
+..qr.e
+xxqr.e
+tiii..
+tuuop.
+yy.op.
+
+Uitvoer:
+43
+
+Als (oplos) niet lukt en (tel) wel, kijk dan of je niet inefficient bent met het bijhouden van de oplossing. Het zou qua looptijd heel weinig moeten schelen.
+
+------------------------------------
+
+7;qwerty (oplos);Correct;0.04;100%;En nu ook oplossen graag.
+Test 7 - qwerty (oplos)
+En nu ook oplossen graag.
+
+Invoer:
+1
+6 6
+4 2
+..qwwe
+..qr.e
+xxqr.e
+tiii..
+tuuop.
+yy.op.
+
+Uitvoer:
+yr1 td1 il1 pu3 ed1 wr1 ru1 ou2 ur3 yr3 od2 rd1 wl1 eu1 ir3 qd3 xr1 tu4 xl1 qu3 il3 ed1 wr1 ru1 ou2 ul4 yl4 od2 rd1 wl1 eu1 ir3 qd3 wl2 pu1 ru1 xr3 td2 wl1 qu3 il2 ed3 xr1
+
+Als (oplos) niet lukt en (tel) wel, kijk dan of je niet inefficient bent met het bijhouden van de oplossing. Het zou qua looptijd heel weinig moeten schelen.
+
+------------------------------------
+
+8;vol;Correct;0.08;100%;Bij deze staat het bord erg vol.
+Test 8 - vol
+Bij deze staat het bord erg vol.
+
+Invoer:
+1
+6 6
+4 2
+aaabcd
+effbcd
+e.xxcd
+ggh...
+.ih.jj
+.ikkll
+
+Uitvoer:
+xl1 bd2 ar1 eu1 xl1 hu1 jl2 dd1 cd2 ar2 fr2 hu2 xr1 gr1 ed4 xl1 gl1 hd2 al2 fl3 bu1 hu1 du1 cu2 gr4 eu1 jr2 iu1 kl2 hd3 bd3 fr2 xr2 gl2 eu3 cd1 ar1 iu3 xl2 gl2 hu2 bu2 jl4 ll2 hd1 bd1 cd2 dd3 xr4
+
+Omdat het bord zo vol staat kan de oplossing moeilijk te vinden zijn. Maar dit moet je programma aankunnen.
+
+------------------------------------
+
+9;rondje;Correct;0.04;100%;Kort, maar lastig...
+Test 9 - rondje
+Kort, maar lastig...
+
+Invoer:
+1
+12 6
+10 2
+..cddd...q..
+a.ce.....q..
+axxe.....q..
+bbryyi......
+.gruui......
+.gtt.i...zz.
+
+Uitvoer:
+zl3 qd3 dr6 eu1 xr9
+
+------------------------------------
+
+10;exponentieel;Correct;0.75;299%;Onoplosbaar, exponentieel veel posities
+Test 10 - exponentieel
+Onoplosbaar, exponentieel veel posities
+
+Invoer:
+1
+20 3
+10 1
+a...c..f.q..i.k.m.op
+axxbcdefgq.hijklmnop
+...b.de.g..h.j.l.n..
+
+Uitvoer:
+Geen oplossing gevonden
+
+Bij deze test zijn er heel veel mogelijke posities, maar hij is onoplosbaar.
+
+------------------------------------
+
+11;Versnellingstest (exponentieel);235%;-;-;Is je programma sneller dan sequentieel?
+Test 11 - Versnellingstest (10)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 235% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	1.77
+
+ Tijd parallel:	0.75
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+12;exponentieler;Correct;3.33;349%;Onoplosbaar, exponentieel veel posities
+Test 12 - exponentieler
+Onoplosbaar, exponentieel veel posities
+
+Invoer:
+1
+22 3
+10 1
+a...c..f.q..i.k.m.op.r
+axxbcdefgq.hijklmnoptr
+...b.de.g..h.j.l.n..t.
+
+Uitvoer:
+Geen oplossing gevonden
+
+Bij deze test zijn er heel veel mogelijke posities, maar hij is onoplosbaar.
+
+------------------------------------
+
+13;Versnellingstest (exponentieler);267%;-;-;Is je programma sneller dan sequentieel?
+Test 13 - Versnellingstest (12)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 267% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	8.89
+
+ Tijd parallel:	3.33
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+14;branching;Correct;2.18;370%;Als exponentieel, maar dan oplosbaar
+Test 14 - branching
+Als exponentieel, maar dan oplosbaar
+
+Invoer:
+1
+22 4
+12 3
+.........zn...........
+.q.s.u.w.zn.aabbccddee
+pqrstuvwy.n..........m
+p.r.t.v.y.nxxhhiijjkkm
+
+Uitvoer:
+al1 bl1 cl1 dl1 el1 mu2 kr1 jr1 ir1 hr1 xr1
+
+Lijkt op exponentieel, maar dan wel oplosbaar.
+
+------------------------------------
+
+15;Versnellingstest (branching);236%;-;-;Is je programma sneller dan sequentieel?
+Test 15 - Versnellingstest (14)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 236% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	5.15
+
+ Tijd parallel:	2.18
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+16;hard-1;Correct;0.05;100%;Erg lastig, testcase 1
+Test 16 - hard-1
+Erg lastig, testcase 1
+
+Invoer:
+0
+21 5
+2 2
+ggggrrrrtt...........
+iii....h.fjjjpo...s.u
+xxab...h.flk.po...s.u
+ccab...mm.lk.nnnvvq..
+............dddeeeq..
+
+Uitvoer:
+3
+
+Deze testcase is onderdeel van een steeds moeilijke wordende serie.
+
+------------------------------------
+
+17;hard-1 (oplos);Correct;0.08;100%;hard-1 in de oplosmodus
+Test 17 - hard-1 (oplos)
+hard-1 in de oplosmodus
+
+Invoer:
+1
+21 5
+2 2
+ggggrrrrtt...........
+iii....h.fjjjpo...s.u
+xxab...h.flk.po...s.u
+ccab...mm.lk.nnnvvq..
+............dddeeeq..
+
+Uitvoer:
+ad1 bd1 xr2
+
+Dit zou niet veel langzamer moeten zijn dan een gewone hard-1.
+
+------------------------------------
+
+18;hard-2;Correct;0.69;218%;Nog wat lastiger
+Test 18 - hard-2
+Nog wat lastiger
+
+Invoer:
+0
+21 5
+7 2
+ggggrrrrtt...........
+iii....h.fjjjpo...s.u
+xxab...h.flk.po...s.u
+ccab......lk.nnnvvq..
+............dddeeeq..
+
+Uitvoer:
+4
+
+Deze testcase is onderdeel van een steeds moeilijke wordende serie.
+
+------------------------------------
+
+19;hard-3;Correct;6.75;227%;Nu is het echt heel lastig
+Test 19 - hard-3
+Nu is het echt heel lastig
+
+Invoer:
+0
+21 5
+7 2
+ggggrrrrtt...........
+iii....h.fjjjpo...s.u
+xxab...h.flk.po...s.u
+ccab...mm.lk.nnnvvq..
+............dddeeeq..
+
+Uitvoer:
+5
+
+Deze testcase is onderdeel van een steeds moeilijke wordende serie.
+
+------------------------------------
+
+20;exponentieel;Correct;0.68;362%;Onoplosbaar, exponentieel veel posities
+Test 20 - exponentieel
+Onoplosbaar, exponentieel veel posities
+
+Invoer:
+1
+20 3
+10 1
+a...c..f.q..i.k.m.op
+axxbcdefgq.hijklmnop
+...b.de.g..h.j.l.n..
+
+Uitvoer:
+Geen oplossing gevonden
+
+Bij deze test zijn er heel veel mogelijke posities, maar hij is onoplosbaar.
+
+------------------------------------
+
+21;Versnellingstest (exponentieel);260%;-;-;Is je programma sneller dan sequentieel?
+Test 21 - Versnellingstest (20)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 260% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	1.77
+
+ Tijd parallel:	0.68
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+22;exponentieel;Correct;0.69;332%;Onoplosbaar, exponentieel veel posities
+Test 22 - exponentieel
+Onoplosbaar, exponentieel veel posities
+
+Invoer:
+1
+20 3
+10 1
+a...c..f.q..i.k.m.op
+axxbcdefgq.hijklmnop
+...b.de.g..h.j.l.n..
+
+Uitvoer:
+Geen oplossing gevonden
+
+Bij deze test zijn er heel veel mogelijke posities, maar hij is onoplosbaar.
+
+------------------------------------
+
+23;Versnellingstest (exponentieel);256%;-;-;Is je programma sneller dan sequentieel?
+Test 23 - Versnellingstest (22)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 256% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	1.77
+
+ Tijd parallel:	0.69
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+24;exponentieler;Correct;3.20;360%;Onoplosbaar, exponentieel veel posities
+Test 24 - exponentieler
+Onoplosbaar, exponentieel veel posities
+
+Invoer:
+1
+22 3
+10 1
+a...c..f.q..i.k.m.op.r
+axxbcdefgq.hijklmnoptr
+...b.de.g..h.j.l.n..t.
+
+Uitvoer:
+Geen oplossing gevonden
+
+Bij deze test zijn er heel veel mogelijke posities, maar hij is onoplosbaar.
+
+------------------------------------
+
+25;Versnellingstest (exponentieler);278%;-;-;Is je programma sneller dan sequentieel?
+Test 25 - Versnellingstest (24)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 278% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	8.89
+
+ Tijd parallel:	3.2
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+26;exponentieler;Correct;3.19;372%;Onoplosbaar, exponentieel veel posities
+Test 26 - exponentieler
+Onoplosbaar, exponentieel veel posities
+
+Invoer:
+1
+22 3
+10 1
+a...c..f.q..i.k.m.op.r
+axxbcdefgq.hijklmnoptr
+...b.de.g..h.j.l.n..t.
+
+Uitvoer:
+Geen oplossing gevonden
+
+Bij deze test zijn er heel veel mogelijke posities, maar hij is onoplosbaar.
+
+------------------------------------
+
+27;Versnellingstest (exponentieler);279%;-;-;Is je programma sneller dan sequentieel?
+Test 27 - Versnellingstest (26)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 279% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	8.89
+
+ Tijd parallel:	3.19
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+28;branching;Correct;2.24;366%;Als exponentieel, maar dan oplosbaar
+Test 28 - branching
+Als exponentieel, maar dan oplosbaar
+
+Invoer:
+1
+22 4
+12 3
+.........zn...........
+.q.s.u.w.zn.aabbccddee
+pqrstuvwy.n..........m
+p.r.t.v.y.nxxhhiijjkkm
+
+Uitvoer:
+al1 bl1 cl1 dl1 el1 mu2 kr1 jr1 ir1 hr1 xr1
+
+Lijkt op exponentieel, maar dan wel oplosbaar.
+
+------------------------------------
+
+29;Versnellingstest (branching);230%;-;-;Is je programma sneller dan sequentieel?
+Test 29 - Versnellingstest (28)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 230% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	5.15
+
+ Tijd parallel:	2.24
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+------------------------------------
+
+30;branching;Correct;2.26;355%;Als exponentieel, maar dan oplosbaar
+Test 30 - branching
+Als exponentieel, maar dan oplosbaar
+
+Invoer:
+1
+22 4
+12 3
+.........zn...........
+.q.s.u.w.zn.aabbccddee
+pqrstuvwy.n..........m
+p.r.t.v.y.nxxhhiijjkkm
+
+Uitvoer:
+al1 bl1 cl1 dl1 el1 mu1 kr1 jr1 ir1 hr1 xr1
+
+Lijkt op exponentieel, maar dan wel oplosbaar.
+
+------------------------------------
+
+31;Versnellingstest (branching);228%;-;-;Is je programma sneller dan sequentieel?
+Test 31 - Versnellingstest (30)
+Is je programma sneller met meer cores? We vergelijken de looptijd met die van de sequentiele referentie-implementatie.
+
+Versnelling: 228% (moet minstens 135% zijn)
+
+ Tijd sequentieel:	5.15
+
+ Tijd parallel:	2.26
+
+Deze test vergelijkt de snelheid van je programma op dezelfde invoer met een verschillend aantal cores. Dit werkt alleen correct als je computer genoeg 'echte' (niet virtuele) cores heeft. Als de versnelling niet hoog genoeg is, kan dit duiden op te agressieve locking of dat je programma niet parallel werkt.
+
+Microsoft Windows NT 6.1.7601 Service Pack 1 (x64)
+.NET version: 4.0.30319.18444
+3 physical core(s), 6 virtual core(s) (hyperthreading), 1 processor(s)

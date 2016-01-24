@@ -1,1 +1,9 @@
 F:\Programming\opdrachten\Path Tracer\bin\Release\template.exe.config
+F:\Programming\RHS\Path Tracer\bin\Release\template.exe.config
+F:\Programming\RHS\Path Tracer\bin\Release\template.exe
+F:\Programming\RHS\Path Tracer\bin\Release\template.pdb
+F:\Programming\RHS\Path Tracer\bin\Release\OpenTK.dll
+F:\Programming\RHS\Path Tracer\bin\Release\System.Numerics.Vectors.dll
+F:\Programming\RHS\Path Tracer\obj\Release\template.csprojResolveAssemblyReference.cache
+F:\Programming\RHS\Path Tracer\obj\Release\template.exe
+F:\Programming\RHS\Path Tracer\obj\Release\template.pdb

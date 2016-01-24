@@ -52,8 +52,9 @@ class Game
 		camera = new Camera( screen.width, screen.height );
 	}
 	// sample: samples a single path up to a maximum depth
-	private Vector3 Sample( Ray ray, int depth )
+	private Vector3 Sample( Ray ray, int depth, int x, int y )
 	{
+        
 		// find nearest ray/scene intersection
 		Scene.Intersect( ray );
 		if (ray.objIdx == -1)
@@ -75,27 +76,35 @@ class Game
 		// handle material interaction
 		float r0 = RTTools.RandomFloat();
 		Vector3 R = Vector3.Zero;
+        
 		if (r0 < material.refr)
 		{
 			// dielectric: refract or reflect
 			RTTools.Refraction( ray.inside, ray.D, ray.N, ref R );
 			Ray extensionRay = new Ray( I + R * EPSILON, R, 1e34f );
 			extensionRay.inside = (Vector3.Dot( ray.N, R ) < 0);
-			return material.diffuse * Sample( extensionRay, depth + 1 );
+            
+			return material.diffuse * Sample( extensionRay, depth + 1 , x, y);
 		}
 		else if ((r0 < (material.refl + material.refr)) && (depth < MAXDEPTH))
 		{
 			// pure specular reflection
 			R = Vector3.Reflect( ray.D, ray.N );
 			Ray extensionRay = new Ray( I + R * EPSILON, R, 1e34f );
-			return material.diffuse * Sample( extensionRay, depth + 1 );
+            
+			return material.diffuse * Sample( extensionRay, depth + 1, x, y);
 		}
 		else
 		{
 			// diffuse reflection
+            if (x == 500 && y == 400)
+            {
+                //Console.WriteLine("test");
+                //return new Vector3(255,255,255);
+            }
 			R = RTTools.DiffuseReflection( RTTools.GetRNG(), ray.N );
 			Ray extensionRay = new Ray( I + R * EPSILON, R, 1e34f );
-			return Vector3.Dot( R, ray.N ) * material.diffuse * Sample( extensionRay, depth + 1 );
+			return Vector3.Dot( R, ray.N ) * material.diffuse * Sample( extensionRay, depth + 1, x, y );
 		}
 	}
 	// tick: renders one frame
@@ -129,7 +138,7 @@ class Game
 		{
 			// this is your CPU only path
 			float scale = 1.0f / (float)++spp;
-			for( int y = 0; y < screen.height; y++ )
+			/*for( int y = 0; y < screen.height; y++ )
 			{
 				for( int x = 0; x < screen.width; x++ )
 				{
@@ -141,7 +150,20 @@ class Game
 					// plot final color
 					screen.pixels[pixelIdx] = RTTools.Vector3ToIntegerRGB( scale * accumulator[pixelIdx] );
 				}
-			}
+			}*/
+            Parallel.For(0, screen.height, y => {
+                for (int x = 0; x < screen.width; x++)
+                {
+                    // generate primary ray
+                    Ray ray = camera.Generate(RTTools.GetRNG(), x, y);
+                    // trace path
+                    int pixelIdx = x + y * screen.width;
+                    accumulator[pixelIdx] += Sample(ray, 0, x, y);
+                    // plot final color
+                    screen.pixels[pixelIdx] = RTTools.Vector3ToIntegerRGB(scale * accumulator[pixelIdx]);
+                }
+            });
+
 		}
 		// stop and report when max render time elapsed
 		int elapsedSeconds = (int)(timer.ElapsedMilliseconds / 1000);

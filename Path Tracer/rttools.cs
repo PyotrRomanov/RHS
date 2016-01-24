@@ -6,10 +6,12 @@ namespace Template
 class RTTools
 {
 	// random number generators
-	private static Random globalRng = new Random(); 
-    private static Random rng = null;
+    
+	private static Random globalRng = new Random();
+    [ThreadStatic] private static Random rng = null;
 	const float PI = 3.14159265359f;
 	const float BRIGHTNESS = 1.5f;
+    
 	public static float RandomFloat() 
     { 
         Random inst = rng; 
@@ -21,6 +23,7 @@ class RTTools
         } 
         return (float)inst.NextDouble(); 
     }
+    
 	public static Random GetRNG()
 	{
         Random inst = rng; 
