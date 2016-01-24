@@ -1,0 +1,1 @@
+F:\Programming\opdrachten\Path Tracer\bin\Release\template.exe.config

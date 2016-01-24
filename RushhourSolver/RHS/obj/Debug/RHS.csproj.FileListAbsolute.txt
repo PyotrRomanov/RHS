@@ -1,6 +1,0 @@
-F:\Dropbox\school\Concurrency\RHS\RHS\bin\Debug\RHS.exe.config
-F:\Dropbox\school\Concurrency\RHS\RHS\bin\Debug\RHS.exe
-F:\Dropbox\school\Concurrency\RHS\RHS\bin\Debug\RHS.pdb
-F:\Dropbox\school\Concurrency\RHS\RHS\obj\Debug\RHS.csprojResolveAssemblyReference.cache
-F:\Dropbox\school\Concurrency\RHS\RHS\obj\Debug\RHS.exe
-F:\Dropbox\school\Concurrency\RHS\RHS\obj\Debug\RHS.pdb
