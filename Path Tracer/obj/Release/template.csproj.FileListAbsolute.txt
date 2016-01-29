@@ -7,3 +7,6 @@ F:\Programming\RHS\Path Tracer\bin\Release\System.Numerics.Vectors.dll
 F:\Programming\RHS\Path Tracer\obj\Release\template.csprojResolveAssemblyReference.cache
 F:\Programming\RHS\Path Tracer\obj\Release\template.exe
 F:\Programming\RHS\Path Tracer\obj\Release\template.pdb
+F:\Programming\RHS\Path Tracer\bin\Release\Cloo.dll
+F:\Programming\RHS\Path Tracer\bin\Release\Cloo.pdb
+F:\Programming\RHS\Path Tracer\bin\Release\Cloo.xml

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks;
 using Cloo;
+using System.IO;
 
 // making vectors work in VS2013:
 // - Uninstall Nuget package manager
@@ -30,6 +31,15 @@ class Game
 	const float EPSILON = 0.0001f;
 	const int MAXDEPTH = 20;
 
+    // openCL definitions
+    ComputeKernel kernel;
+    ComputeCommandQueue queue;
+    ComputeProgram program;
+    ComputePlatform platform;
+    ComputeContext context;
+    ComputeBuffer<int> outputBuffer;
+    int[] tmpOutputBuffer;
+
 	// clear the accumulator: happens when camera moves
 	private void ClearAccumulator()
 	{
@@ -51,6 +61,35 @@ class Game
 		scene = new Scene();
 		// setup camera
 		camera = new Camera( screen.width, screen.height );
+
+        // initialize required opencl things if gpu is used
+        if (useGPU)
+        {
+            StreamReader streamReader = new StreamReader("kernel.cl");
+            string clSource = streamReader.ReadToEnd();
+            streamReader.Close();
+
+            platform = ComputePlatform.Platforms[0];
+            context = new ComputeContext(ComputeDeviceTypes.Gpu, new ComputeContextPropertyList(platform), null, IntPtr.Zero);
+            queue = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
+            
+            program = new ComputeProgram(context, clSource);
+            try
+            {
+                program.Build(null, null, null, IntPtr.Zero);
+                kernel = program.CreateKernel("rayTest");
+                tmpOutputBuffer = screen.pixels;
+                outputBuffer = new ComputeBuffer<int>(context, ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.UseHostPointer, screen.pixels);
+            }
+            catch (ComputeException e) {
+                Console.WriteLine("Error in kernel code: {0}", program.GetBuildLog(context.Devices[0]));
+                Console.ReadLine();
+            }
+        }
+        else {
+            return;
+        }
+
 	}
 	// sample: samples a single path up to a maximum depth
 	private Vector3 Sample( Ray ray, int depth, int x, int y )
@@ -125,7 +164,7 @@ class Game
 			ClearAccumulator();
 		}
 		// render
-		if (false) // if (useGPU)
+		if (useGPU) // if (useGPU)
 		{
 			// add your CPU + OpenCL path here
 			// mind the gpuPlatform parameter! This allows us to specify the platform on our
