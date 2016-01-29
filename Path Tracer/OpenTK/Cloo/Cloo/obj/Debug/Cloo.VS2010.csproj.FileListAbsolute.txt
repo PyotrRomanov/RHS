@@ -1,0 +1,7 @@
+F:\Programming\Cloo\Cloo\bin\Debug\Cloo.dll.config
+F:\Programming\Cloo\Cloo\bin\Debug\Cloo.dll
+F:\Programming\Cloo\Cloo\bin\Debug\Cloo.pdb
+F:\Programming\Cloo\Cloo\bin\Debug\Cloo.xml
+F:\Programming\Cloo\Cloo\obj\Debug\Cloo.VS2010.csprojResolveAssemblyReference.cache
+F:\Programming\Cloo\Cloo\obj\Debug\Cloo.dll
+F:\Programming\Cloo\Cloo\obj\Debug\Cloo.pdb

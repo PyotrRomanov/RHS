@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks;
+using Cloo;
 
 // making vectors work in VS2013:
 // - Uninstall Nuget package manager
