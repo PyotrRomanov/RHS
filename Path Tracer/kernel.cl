@@ -1,74 +1,79 @@
+__constant float lensSize = 0.04f;
 __constant float PI = 3.14159265359f;
-
-
+ 
 typedef struct
 {
-	float3 diffuse;
-	float refl;
-	float refr;
+    float3 diffuse;
+    float refl;
+    float refr;
     bool emissive;
-} Material;
-
+} material;
+ 
 typedef struct
 {
-	float3 origin;
-	float3 direction;
-	int objIdx;
+    float3 origin;
+    float3 direction;
+    int objIdx;
     float t;
     float3 N;
     bool inside;
-} Ray;
-
-int Map(int x, int in_min, int in_max, int out_min, int out_max)
+} ray;
+ 
+int map(int x, int in_min, int in_max, int out_min, int out_max)
 {
-	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-
-float3 SampleSkydome()
+ 
+float3 sampleSkydome(__global float* skydome, float3 D)
 {
-    return (float3)(1.0f, 1.0f, 0.0f);
+    float INVPI = 1.0f / PI;
+    int u = (int)(2500.0f * 0.5f * (1.0f + atan2( D.x, -D.z ) * INVPI));
+    int v = (int)(1250.0f * acos( D.y ) * INVPI);
+    int idx = u + v * 2500;
+    return (float3)(skydome[idx * 3 + 0], skydome[idx * 3 + 1], skydome[idx * 3 + 2] );
+    //return (float3)(1.0f, 1.0f, 1.0f);
 }
-
-float GetRandom(__global float* rs, int offset)
+ 
+float getRandomFloat(__global float* randoms, int offset)
 {
-    return rs[(get_global_id(0) + offset) % 1000];
+    return randoms[(get_global_id(0) + offset) % 1000];
 }
-
-Ray GenRay(int x, int y, __global float3* camera, uint width, uint height, __global float* randoms)
+ 
+ray generateRay(int x, int y, __global float4* camera, uint width, uint height, __global float* randoms)
 {
-    Ray returnRay;
-
+    ray ret;
+ 
     // Unpacking camera info;
-    float3 pos = camera[0];
-    float3 p1 = camera[1];
-    float3 p2 = camera[2];
-    float3 p3 = camera[3];
-    float3 up = camera[4];
-    float3 right = camera[5];
-
-    float r0 = GetRandom(randoms, 0);
-    float r1 = GetRandom(randoms, 1);
-    float r2 = GetRandom(randoms, 2) - 0.5f;
-    float r3 = GetRandom(randoms, 3) - 0.5f;
-
+    float3 pos = (float3)(camera[0].x,camera[0].y,camera[0].z);
+    float3 p1 = (float3)(camera[1].x,camera[1].y,camera[1].z);
+    float3 p2 = (float3)(camera[2].x,camera[2].y,camera[2].z);
+    float3 p3 = (float3)(camera[3].x,camera[3].y,camera[3].z);
+    float3 up = (float3)(camera[4].x,camera[4].y,camera[4].z);
+    float3 right = (float3)(camera[5].x,camera[5].y,camera[5].z);
+ 
+    float r0 = getRandomFloat(randoms, 0);
+    float r1 = getRandomFloat(randoms, 1);
+    float r2 = getRandomFloat(randoms, 2) - 0.5f;
+    float r3 = getRandomFloat(randoms, 3) - 0.5f;
+ 
     // calculate sub-pixel ray target position on screen plane
     float u = ((float)x + r0) / (float)width;
     float v = ((float)y + r1) / (float)height;
     float3 T = p1 + u * (p2 - p1) + v * (p3 - p1);
     // calculate position on aperture
-    float3 P = pos + 0.004f /*lensSize*/ * (right + up);
-    //float3 P = pos + 0.004f /*lensSize*/ * (r2 * right + r3 * up);
+    float3 P = pos + lensSize * (right + up);
+    //float3 P = pos + lensSize * (r2 * right + r3 * up);
     // calculate ray direction
     float3 D = normalize(T - P);
-
+ 
     // return new primary ray
-    returnRay.origin = P;
-    returnRay.direction = D;
-    returnRay.objIdx = -1;
-    return returnRay;
+    ret.origin = P;
+    ret.direction = D;
+    ret.objIdx = -1;
+    return ret;
 }
-
-Ray IntersectSphere(int idx, Ray r, float4 s)
+ 
+ray intersectSphere(int idx, ray r, float4 s)
 {
     float3 L = s.xyz - r.origin;
     float tca = dot(L, r.direction);
@@ -95,17 +100,17 @@ Ray IntersectSphere(int idx, Ray r, float4 s)
         return r;
     }
 }
-
-Ray Intersect(Ray r, __global float4* world, uint worldSize)
+ 
+ray intersect(ray r, __global float4* world, uint worldSize)
 {
     for (int i = 0; i < worldSize; i++)
-        r =IntersectSphere(i, r, world[i]);
+        r = intersectSphere(i, r, world[i]);
     return r;
 }
-
-Material GetMaterial(int objIdx, float3 I)
+ 
+material GetMaterial(int objIdx, float3 I)
 {
-    Material mat;
+    material mat;
     if (objIdx == 0)
     {
         // procedural checkerboard pattern for floor plane
@@ -123,18 +128,18 @@ Material GetMaterial(int objIdx, float3 I)
     if (objIdx == 8) { mat.refl = mat.refr = 0; mat.emissive = true; mat.diffuse = (float3)(8.5f, 8.5f, 7.0f); }
     return mat;
 }
-
-float3 Reflect(float3 V, float3 N)
+ 
+float3 reflect(float3 V, float3 N)
 {
     return V - 2.0f * dot(V, N) * N;
 }
-
-float3 Refract(bool inside, float3 D, float3 N, float3 R, float rnd)
+ 
+float3 refract(bool inside, float3 D, float3 N, float3 R, float rnd)
 {
     float nc = inside ? 1 : 1.2f, nt = inside ? 1.2f : 1;
     float nnt = nt / nc, ddn = dot(D, N);
     float cos2t = 1.0f - nnt * nnt * (1 - ddn * ddn);
-    R = Reflect(D, N);
+    R = reflect(D, N);
     if (cos2t >= 0)
     {
         float r1 = rnd;
@@ -147,11 +152,11 @@ float3 Refract(bool inside, float3 D, float3 N, float3 R, float rnd)
     }
     return R;
 }
-
-float3 DiffuseRefract(float3 N, __global float* randoms)
+ 
+float3 diffuseRefract(float3 N, __global float* randoms)
 {
-    float r1 = GetRandom(randoms, 6);
-    float r2 = GetRandom(randoms, 7);
+    float r1 = getRandomFloat(randoms, 6);
+    float r2 = getRandomFloat(randoms, 7);
     float r = sqrt(1.0f - r1 * r1);
     float phi = 2 * PI * r2;
     float3 R;
@@ -161,26 +166,27 @@ float3 DiffuseRefract(float3 N, __global float* randoms)
     if (dot(N, R) < 0) R *= -1.0f;
     return R;
 }
-
-float3 Sample(Ray r, int depth, __global float4* world, uint worldSize, __global float* randoms)
-{ 
-    r = Intersect(r, world, worldSize);
-
+ 
+// sample: samples a single path up to a maximum depth
+float3 sample(ray r, int depth, __global float4* world, __global float* skydome, uint worldSize, __global float* randoms)
+{
+    r = intersect(r, world, worldSize);
+ 
     if (r.objIdx == -1)
-        return SampleSkydome();
-
+        return sampleSkydome(skydome, r.direction);
+ 
     float3 I = r.origin + r.t * r.direction;
-    Material mat = GetMaterial(r.objIdx, I);
-
+    material mat = GetMaterial(r.objIdx, I);
+ 
     if (mat.emissive) return mat.diffuse;
     if (depth >= 20) return (float3)(0.0f, 0.0f, 0.0f);
-
-    float r0 = GetRandom(randoms, 0);
+ 
+    float r0 = getRandomFloat(randoms, 0);
     float3 R = (float3)(0.0f, 0.0f, 0.0f);
     if (r0 < mat.refr)
     {
-        R = Refract(r.inside, r.direction, r.N, R, GetRandom(randoms, 5));
-        Ray er;
+        R = refract(r.inside, r.direction, r.N, R, getRandomFloat(randoms, 5));
+        ray er;
         er.origin = I + R * 0.0001f;
         er.direction = R;
         er.inside = (dot(r.N, R) < 0);
@@ -189,8 +195,8 @@ float3 Sample(Ray r, int depth, __global float4* world, uint worldSize, __global
     else if ((r0 < (mat.refl + mat.refr)) && (depth < 20))
     {
         // pure specular reflection
-        R = Reflect(r.direction, r.N);
-        Ray er;
+        R = reflect(r.direction, r.N);
+        ray er;
         er.origin = I + R * 0.0001f;
         er.direction = R;
         return mat.diffuse;// Recursiev shit * Sample(extensionRay, depth + 1);
@@ -198,22 +204,26 @@ float3 Sample(Ray r, int depth, __global float4* world, uint worldSize, __global
     else
     {
         // diffuse reflection
-        R = DiffuseRefract(r.N, randoms);
-        Ray er;
+        R = diffuseRefract(r.N, randoms);
+        ray er;
         er.origin = I + R * 0.0001f;
         er.direction = R;
         return dot(R, r.N) * mat.diffuse;// Recursive shit * Sample(extensionRay, depth + 1);
     }
 }
-
-__kernel void Main(__global int* dst, uint width, uint height, __global float4* world, uint worldSize, __global float3* camera, __global float* randoms)  //, __global float* viewTransform, __global float* worldTransforms)
+ 
+__kernel void Main(__global int* dst, uint width, uint height, __global float4* world, uint worldSize, __global float* skydome, __global float4* camera, __global float* randoms)
 {
+    // dst = output buffer
+    // width & height = dimensions of the output buffer
+    // world = pos + radius;
+ 
     int idx = get_global_id(0);// * get_global_size(0);
     int idy = get_global_id(1);// * get_global_size(1);
-
-    Ray r = GenRay(idx, idy, camera, width, height, randoms);
-    float3 col = Sample(r, 0, world, worldSize, randoms);
-
+ 
+ 
+    ray r = generateRay(idx, idy, camera, width, height, randoms);
+    float3 col = sample(r, 0, world, skydome, worldSize, randoms);
+ 
     dst[idx + idy * width] = ((int)(col.x * 255) << 16) + ((int)(col.y * 255) << 8) + (int)(col.z * 255);
-	//dst[idx + idy * width] = ((int)(GetRandom(randoms, 1) * 255) << 16) + ((int)(GetRandom(randoms, 2) * 255) << 8) + (int)(GetRandom(randoms, 3) * 255);
 }

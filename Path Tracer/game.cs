@@ -42,6 +42,7 @@ class Game
     ComputeBuffer<Vector3> cameraBuffer;
     ComputeBuffer<float> rndBuffer;
     ComputeBuffer<Vector4> sceneBuffer;
+    ComputeBuffer<float> skydome;
 
 	// clear the accumulator: happens when camera moves
 	private void ClearAccumulator()
@@ -73,6 +74,8 @@ class Game
         for (int i = 0; i < 1000; i++)
             randoms[i] = (float)r.NextDouble();
 
+        int variable = r.Next();
+
         Console.WriteLine("Done!");
 
         // initialize required opencl things if gpu is used
@@ -92,18 +95,20 @@ class Game
                 program.Build(null, null, null, IntPtr.Zero);
                 kernel = program.CreateKernel("Main");
 
-                sceneBuffer = new ComputeBuffer<Vector4>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, scene.Convert());
+                sceneBuffer = new ComputeBuffer<Vector4>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, scene.toCL());
                 rndBuffer = new ComputeBuffer<float>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, randoms);
-                cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.Convert());
+                cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.toCL());
                 outputBuffer = new ComputeBuffer<int>(context, ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.UseHostPointer, screen.pixels);
-                
+                skydome = new ComputeBuffer<float>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, scene.Skydome);
+
                 kernel.SetMemoryArgument(0, outputBuffer);
                 kernel.SetValueArgument(1, screen.width);
                 kernel.SetValueArgument(2, screen.height);
                 kernel.SetMemoryArgument(3, sceneBuffer);
-                kernel.SetValueArgument(4, scene.Convert().Length);
-                kernel.SetMemoryArgument(5, cameraBuffer);
-                kernel.SetMemoryArgument(6, rndBuffer);
+                kernel.SetValueArgument(4, scene.toCL().Length);
+                kernel.SetMemoryArgument(5, skydome);
+                kernel.SetMemoryArgument(6, cameraBuffer);
+                kernel.SetMemoryArgument(7, rndBuffer);
 
             }
             catch (ComputeException e) {
@@ -190,7 +195,7 @@ class Game
 			ClearAccumulator();
 		}
 		// render
-		if (useGPU) // if (useGPU)
+		if (false) // if (useGPU)
 		{
 			// add your CPU + OpenCL path here
 			// mind the gpuPlatform parameter! This allows us to specify the platform on our
@@ -211,9 +216,9 @@ class Game
             for (int i = 0; i < 1000; i++)
                 randoms[i] = (float)r.NextDouble();
             rndBuffer = new ComputeBuffer<float>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, randoms);
-            cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.Convert());
-            kernel.SetMemoryArgument(5, cameraBuffer);
-            kernel.SetMemoryArgument(6, rndBuffer);
+            cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.toCL());
+            kernel.SetMemoryArgument(6, cameraBuffer);
+            kernel.SetMemoryArgument(7, rndBuffer);
 		}
 		else
 		{

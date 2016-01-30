@@ -1,46 +1,43 @@
 Testcase;Status;Tijd;CPU;Omschrijving
-Referentie;Correct;36;15.15;100%
-CPU-versie;Correct;97;15.15;403%
-GPU-versie;Correct;97;15.00;400%
+Referentie;Correct;36;15.11;100%
+CPU-versie;Fout;15;15.00;396%
+GPU-versie;Fout;15;15.00;388%
 
 ------------------------------------
 
-1;Referentie;Correct;36;15.15;100%
+1;Referentie;Correct;36;15.11;100%
 Test 1 - Referentie
 Benchmark van ons referentieprogramma
 
 Uitvoer:
-36 15148 49.25251 3 6[0x7FEDED4AAA0] ANOMALY: meaningless REX prefix used
-[0x7FEDED348C0] ANOMALY: meaningless REX prefix used
+36 15111 49.35932 3 6[0x7FEE0AAAAA0] ANOMALY: meaningless REX prefix used
+[0x7FEE0A948C0] ANOMALY: meaningless REX prefix used
 
 ------------------------------------
 
-2;CPU-versie;Correct;97;15.15;403%
+2;CPU-versie;Fout;15;15.00;396%
 Test 2 - CPU-versie
 Benchmark van de multithreaded versie.
 
 Uitvoer:
-97 15145 46.35784 3 6[0x7FEE422AAA0] ANOMALY: meaningless REX prefix used
-[0x7FEE42148C0] ANOMALY: meaningless REX prefix used
+Generating randoms....	Done!
+95 15044 46.39475 3 6[0x7FEE0AAAAA0] ANOMALY: meaningless REX prefix used
+[0x7FEE0A948C0] ANOMALY: meaningless REX prefix used
 
-Performance-winst t.o.v. referentie: 269%
-We verwachten op deze computer 299% tot 331%
-Indicatie aantal punten: 0 / 3
+De afwijking van de referentie-afbeelding was te groot (rmse > 150).
 
 ------------------------------------
 
-3;GPU-versie;Correct;97;15.00;400%
+3;GPU-versie;Fout;15;15.00;388%
 Test 3 - GPU-versie
 Benchmark van de OpenCL-versie
 
 Uitvoer:
-97 15000 46.37245 3 6[0x7FEDED4AAA0] ANOMALY: meaningless REX prefix used
-[0x7FEDED348C0] ANOMALY: meaningless REX prefix used
+Generating randoms....	Done!
+96 15022 46.42074 3 6[0x7FEDD9BAAA0] ANOMALY: meaningless REX prefix used
+[0x7FEDD9A48C0] ANOMALY: meaningless REX prefix used
 
-Performance-winst t.o.v. referentie: 269%
-Een goede GPU-implementatie zou 10 tot 100 keer beter moeten presteren dan CPU. Performance is in principe geen onderdeel van de beoordeling, maar kan wel duiden op andere fouten (of op het niet aanwezig zijn van een GPU-implementatie).
-Indicatie punten GPU: 0/5
-Indicatie punten heterogeen: 0 / 2 (indicatie op basis van CPU-gebruik)
+De afwijking van de referentie-afbeelding was te groot (rmse > 150).
 
 Microsoft Windows NT 6.1.7601 Service Pack 1 (x64)
 .NET version: 4.0.30319.42000

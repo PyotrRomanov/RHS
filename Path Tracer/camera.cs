@@ -79,7 +79,7 @@ class Camera
 		return new Ray( P, D, 1e34f );
 	}
 
-    public Vector3[] Convert()
+    public Vector3[] toCL()
     {
         Vector3[] returnval = new Vector3[6];
         returnval[0] = pos;

@@ -99,7 +99,12 @@ class Scene
 		IntersectSphere( 8, light, ray );
 	}
 
-    public Vector4[] Convert()
+    public float[] Skydome
+    {
+        get { return skybox; }
+    }
+
+    public Vector4[] toCL()
     {
         Vector4[] returnval = new Vector4[9];
         returnval[0] = new Vector4(plane1.pos, plane1.r);
