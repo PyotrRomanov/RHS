@@ -78,6 +78,18 @@ class Camera
 		// return new primary ray
 		return new Ray( P, D, 1e34f );
 	}
+
+    public Vector3[] Convert()
+    {
+        Vector3[] returnval = new Vector3[6];
+        returnval[0] = pos;
+        returnval[1] = p1;
+        returnval[2] = p2;
+        returnval[3] = p3;
+        returnval[4] = up;
+        returnval[5] = right;
+        return returnval;
+    }
 }
 
 } // namespace Template

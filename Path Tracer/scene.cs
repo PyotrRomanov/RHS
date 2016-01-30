@@ -98,6 +98,19 @@ class Scene
 		for( int i = 0; i < 6; i++ ) IntersectSphere( i + 2, sphere[i], ray );
 		IntersectSphere( 8, light, ray );
 	}
+
+    public Vector4[] Convert()
+    {
+        Vector4[] returnval = new Vector4[9];
+        returnval[0] = new Vector4(plane1.pos, plane1.r);
+        returnval[1] = new Vector4(plane2.pos, plane2.r);
+        returnval[8] = new Vector4(light.pos, light.r);
+
+        for (int i = 0; i < 6; i++)
+            returnval[2 + i] = new Vector4(sphere[i].pos, sphere[i].r);
+
+        return returnval;
+    }
 }
 
 } // namespace Template

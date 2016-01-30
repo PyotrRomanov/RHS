@@ -37,8 +37,11 @@ class Game
     ComputeProgram program;
     ComputePlatform platform;
     ComputeContext context;
+    float[] randoms;
     ComputeBuffer<int> outputBuffer;
-    int[] tmpOutputBuffer;
+    ComputeBuffer<Vector3> cameraBuffer;
+    ComputeBuffer<float> rndBuffer;
+    ComputeBuffer<Vector4> sceneBuffer;
 
 	// clear the accumulator: happens when camera moves
 	private void ClearAccumulator()
@@ -62,10 +65,20 @@ class Game
 		// setup camera
 		camera = new Camera( screen.width, screen.height );
 
+        // Generate randoms
+        Console.Write("Generating randoms....\t");
+
+        randoms = new float[1000];
+        Random r = RTTools.GetRNG();
+        for (int i = 0; i < 1000; i++)
+            randoms[i] = (float)r.NextDouble();
+
+        Console.WriteLine("Done!");
+
         // initialize required opencl things if gpu is used
         if (useGPU)
         {
-            StreamReader streamReader = new StreamReader("kernel.cl");
+            StreamReader streamReader = new StreamReader("../../kernel.cl");
             string clSource = streamReader.ReadToEnd();
             streamReader.Close();
 
@@ -77,13 +90,26 @@ class Game
             try
             {
                 program.Build(null, null, null, IntPtr.Zero);
-                kernel = program.CreateKernel("rayTest");
-                tmpOutputBuffer = screen.pixels;
+                kernel = program.CreateKernel("Main");
+
+                sceneBuffer = new ComputeBuffer<Vector4>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, scene.Convert());
+                rndBuffer = new ComputeBuffer<float>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, randoms);
+                cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.Convert());
                 outputBuffer = new ComputeBuffer<int>(context, ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.UseHostPointer, screen.pixels);
+                
+                kernel.SetMemoryArgument(0, outputBuffer);
+                kernel.SetValueArgument(1, screen.width);
+                kernel.SetValueArgument(2, screen.height);
+                kernel.SetMemoryArgument(3, sceneBuffer);
+                kernel.SetValueArgument(4, scene.Convert().Length);
+                kernel.SetMemoryArgument(5, cameraBuffer);
+                kernel.SetMemoryArgument(6, rndBuffer);
+
             }
             catch (ComputeException e) {
                 Console.WriteLine("Error in kernel code: {0}", program.GetBuildLog(context.Devices[0]));
                 Console.ReadLine();
+                useGPU = false;
             }
         }
         else {
@@ -173,24 +199,27 @@ class Game
 			// platform number than required by your hardware. In that case, you can hardcode
 			// the platform during testing (ignoring gpuPlatform); do not forget to put back
 			// gpuPlatform before submitting!
+            long[] workSize = { screen.width, screen.height };
+            long[] localSize = { 16, 2 };
+            queue.Execute(kernel, null, workSize, null, null);
+            queue.Finish();
+
+            queue.ReadFromBuffer(outputBuffer, ref screen.pixels, true, null);
+            Console.WriteLine(screen.pixels[0]);
+
+            Random r = RTTools.GetRNG();
+            for (int i = 0; i < 1000; i++)
+                randoms[i] = (float)r.NextDouble();
+            rndBuffer = new ComputeBuffer<float>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, randoms);
+            cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.Convert());
+            kernel.SetMemoryArgument(5, cameraBuffer);
+            kernel.SetMemoryArgument(6, rndBuffer);
 		}
 		else
 		{
 			// this is your CPU only path
 			float scale = 1.0f / (float)++spp;
-			/*for( int y = 0; y < screen.height; y++ )
-			{
-				for( int x = 0; x < screen.width; x++ )
-				{
-					// generate primary ray
-					Ray ray = camera.Generate( RTTools.GetRNG(), x, y );
-					// trace path
-					int pixelIdx = x + y * screen.width;
-					accumulator[pixelIdx] += Sample( ray, 0 );
-					// plot final color
-					screen.pixels[pixelIdx] = RTTools.Vector3ToIntegerRGB( scale * accumulator[pixelIdx] );
-				}
-			}*/
+			
             Parallel.For(0, screen.height, y => {
                 for (int x = 0; x < screen.width; x++)
                 {
@@ -215,3 +244,11 @@ class Game
 }
 
 } // namespace Template
+
+/*
+ * 
+                sceneBuffer = new ComputeBuffer<Vector4>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, scene.toCL());
+                rndBuffer = new ComputeBuffer<float>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, randoms);
+                cameraBuffer = new ComputeBuffer<Vector3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.UseHostPointer, camera.ToCL());
+                outputBuffer = new ComputeBuffer<int>(context, ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.UseHostPointer, screen.pixels);
+*/
